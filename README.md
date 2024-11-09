@@ -2,7 +2,7 @@
 
 This project sets up an end-to-end data pipeline that transforms and processes historical data from a SQL Database into a structured format in Azure Synapse Analytics, utilizing Azure Data Lake Storage (ADLS) and Delta Tables for efficient storage and querying.
 
-<img src="assets/images/fintech_pipeline_run.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 3px solid #d3d3d3;">
+<img src="assets/images/fintech_pipeline_run.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 2px solid #d3d3d3; border-radius: 10px" width="600">
 
 ## Tech Stack
 
@@ -19,7 +19,7 @@ This project sets up an end-to-end data pipeline that transforms and processes h
 
 The data pipeline consists of the following stages:
 
-<img src="assets/images/storage_account_layers.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 3px solid #d3d3d3;">
+<img src="assets/images/storage_account_layers.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="600">
 
 - **Bronze Layer**: Raw, unprocessed data stored in ADLS.
 - **Silver Layer**: Cleaned and transformed data stored as Delta Tables.
@@ -35,7 +35,7 @@ The pipeline consists of the following activities:
 2. **CopyEachTableToBronzeLayer**:
    - A **ForEach** activity that iterates over the tables fetched in the previous step and copies each table from SQL to the **Bronze layer** in ADLS using the **Copy** activity.
 
-<img src="assets/images/sql_database_tables.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 3px solid #d3d3d3;">
+<img src="assets/images/sql_database_tables.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="600">
 
 1. **BronzeToSilver_ETL**:
    - A **SynapseNotebook** activity that processes the data in the Bronze layer and performs ETL transformations, storing the results in the **Silver layer**.
