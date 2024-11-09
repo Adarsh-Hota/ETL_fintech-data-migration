@@ -1,0 +1,201 @@
+{
+    "name": "FintechDataMigration",
+    "properties": {
+        "activities": [
+            {
+                "name": "GetTableListFromSqlDatabase",
+                "type": "Lookup",
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureSqlSource",
+                        "sqlReaderQuery": "SELECT TABLE_SCHEMA AS SchemaName, TABLE_NAME AS TableName FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' and TABLE_SCHEMA = 'fintech' ORDER BY SchemaName, TableName;",
+                        "queryTimeout": "02:00:00"
+                    },
+                    "dataset": {
+                        "referenceName": "omitted for security reason",
+                        "type": "DatasetReference"
+                    }
+                }
+            },
+            {
+                "name": "CopyEachTableToBronzeLayer",
+                "type": "ForEach",
+                "typeProperties": {
+                    "items": {
+                        "value": "@activity('GetTableListFromSqlDatabase').output.value",
+                        "type": "Expression"
+                    },
+                    "activities": [
+                        {
+                            "name": "CopyTableToBronzeLayer",
+                            "type": "Copy",
+                            "typeProperties": {
+                                "source": {
+                                    "type": "AzureSqlSource",
+                                    "sqlReaderQuery": {
+                                        "value": "@{concat('SELECT * FROM ', item().schemaName, '.', item().tableName)}",
+                                        "type": "Expression"
+                                    }
+                                },
+                                "sink": {
+                                    "type": "ParquetSink",
+                                    "storeSettings": {
+                                        "type": "AzureBlobFSWriteSettings"
+                                    },
+                                    "formatSettings": {
+                                        "type": "ParquetWriteSettings"
+                                    }
+                                }
+                            },
+                            "inputs": [
+                                {
+                                    "referenceName": "omitted for security reason",
+                                    "type": "DatasetReference"
+                                }
+                            ],
+                            "outputs": [
+                                {
+                                    "referenceName": "omitted for security reason",
+                                    "type": "DatasetReference",
+                                    "parameters": {
+                                        "tableName": {
+                                            "value": "@item().TableName",
+                                            "type": "Expression"
+                                        },
+                                        "schemaName": {
+                                            "value": "@item().SchemaName",
+                                            "type": "Expression"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "BronzeToSilver_ETL",
+                "type": "SynapseNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "CopyEachTableToBronzeLayer",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "notebook": {
+                        "referenceName": "omitted for security reason",
+                        "type": "NotebookReference"
+                    },
+                    "snapshot": true,
+                    "sparkPool": {
+                        "referenceName": "omitted for security reason",
+                        "type": "BigDataPoolReference"
+                    },
+                    "executorSize": "Small",
+                    "conf": {
+                        "spark.dynamicAllocation.enabled": true
+                    },
+                    "driverSize": "Small"
+                }
+            },
+            {
+                "name": "SilverToGold_ETL",
+                "type": "SynapseNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "BronzeToSilver_ETL",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "notebook": {
+                        "referenceName": "omitted for security reason",
+                        "type": "NotebookReference"
+                    },
+                    "snapshot": true,
+                    "sparkPool": {
+                        "referenceName": "omitted for security reason",
+                        "type": "BigDataPoolReference"
+                    },
+                    "executorSize": "Small",
+                    "conf": {
+                        "spark.dynamicAllocation.enabled": null
+                    },
+                    "driverSize": "Small"
+                }
+            },
+            {
+                "name": "PipelineSuccessNotification",
+                "type": "WebActivity",
+                "dependsOn": [
+                    {
+                        "activity": "SilverToGold_ETL",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "url": "https://omitted for security reason",
+                    "body": {
+                        "value": "{\n    \"to\": \"omitted for security reason\",\n    \"subject\": \"omitted for security reason\",\n    \"body\": \"omitted for security reason\"\n}"
+                    }
+                }
+            },
+            {
+                "name": "PipelineFailedNotification",
+                "type": "WebActivity",
+                "dependsOn": [
+                    {
+                        "activity": "SilverToGold_ETL",
+                        "dependencyConditions": [
+                            "Failed"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "url": "https://omitted for security reason",
+                    "body": {
+                        "value": "{\n    \"to\": \"omitted for security reason\",\n    \"subject\": \"omitted for security reason\",\n    \"body\": \"omitted for security reason\"\n}"
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "to": {
+                "type": "string",
+                "defaultValue": "omitted for security reason"
+            },
+            "emailSubjectSuccess": {
+                "type": "string",
+                "defaultValue": "omitted for security reason"
+            },
+            "emailBodySuccess": {
+                "type": "string",
+                "defaultValue": "omitted for security reason"
+            },
+            "emailSubjectFailed": {
+                "type": "string",
+                "defaultValue": "omitted for security reason"
+            },
+            "emailBodyFailed": {
+                "type": "string",
+                "defaultValue": "omitted for security reason"
+            }
+        },
+        "annotations": []
+    }
+}
