@@ -6,9 +6,13 @@ The following are the main steps of the pipeline:
 
 Create and structure a SQL database with tables containing historical data that will serve as the source for further processing.
 
+<img src="../assets/images/sql_database_tables.png" alt="SQL Database Tables" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="500">
+
 ### 2. Data Pipeline Setup in Azure Synapse
 
 Set up a dynamic data pipeline in Azure Synapse to move data from the SQL Database to the **Bronze Layer** in Azure Data Lake Storage (ADLS). This step handles raw data storage for further transformations.
+
+<img src="../assets/images/fintech_pipeline.png" alt="SQL Database Tables" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="500">
 
 ### 3. Bronze to Silver Transformation (PySpark)
 
