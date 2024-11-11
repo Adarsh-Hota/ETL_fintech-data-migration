@@ -30,8 +30,8 @@ Set up a dynamic data pipeline in Azure Synapse to move data from the SQL Databa
 
 <img src="../assets/images/storage_account_layers.png" alt="SQL Database Tables" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="500">
 
+The Bronze Layer handles raw data storage for further transformations. Each table from the SQL database is stored in Parquet format under the following structure:
 
-This Bronze Layer handles raw data storage for further transformations. In it, each table from the SQL database is stored in Parquet format under the following structure:
 ```
 bronze/
 └── fintech/
@@ -44,6 +44,8 @@ bronze/
 Create and configure a PySpark notebook to read the raw data from the Bronze Layer and transform it into a more refined format, which is then written into the **Silver Layer** as Delta Tables.
    - [View BronzeToSilver Notebook](../notebooks/BronzeToSilver_ETL.ipynb)
 
+The Silver layer structure is organized as follows:
+
 ```
 silver/
 └── fintech/
@@ -55,6 +57,8 @@ silver/
 
 Develop and configure another PySpark notebook to read the transformed data from the Silver Layer, apply further processing, and write the final, optimized dataset into the **Gold Layer** as Delta Tables for high-quality data.
    - [View SilverToGold Notebook](../notebooks/SilverToGold_ETL.ipynb)
+
+The Gold layer structure is organized as follows:
 
 ```
 gold/

@@ -45,4 +45,5 @@ The pipeline includes the following main activities:
 
    *Above: Example of the email sent upon pipeline failure.*
 
-For parameter details, see [Parameters](Parameters.md).
+For a detailed breakdown of the pipeline stages, refer to the [Pipeline Steps](Pipeline_Steps.md) document.
+
