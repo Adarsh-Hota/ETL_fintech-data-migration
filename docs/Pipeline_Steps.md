@@ -25,7 +25,6 @@ Each subfolder includes `create_table_<table_name>.sql` and `insert_records_<tab
 ### 2. Data Pipeline Setup in Azure Synapse
 
 <img src="../assets/images/fintech_pipeline.png" alt="SQL Database Tables" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="500">
-<br></br>
 
 The pipeline configuration is available in the [pipeline_definition.json](../src/pipeline/pipeline_definition.json) file.
 
