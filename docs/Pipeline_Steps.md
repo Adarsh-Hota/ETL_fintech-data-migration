@@ -25,6 +25,9 @@ Each subfolder includes `create_table_<table_name>.sql` and `insert_records_<tab
 ### 2. Data Pipeline Setup in Azure Synapse
 
 <img src="../assets/images/fintech_pipeline.png" alt="SQL Database Tables" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="500">
+<br></br>
+
+The pipeline configuration is available in the [pipeline_definition.json](../src/pipeline/pipeline_definition.json) file.
 
 Set up a dynamic data pipeline in Azure Synapse to move data from the SQL Database to the **Bronze Layer** in Azure Data Lake Storage (ADLS). Refer to the [Pipeline Activities](Pipeline_Activities.md) and [Parameters](Parameters.md) documents for for more information on each pipeline activity and parameter details.
 
