@@ -2,7 +2,9 @@
 
 This project sets up an end-to-end data pipeline that transforms and processes historical data from a SQL Database into a structured format in Azure Synapse Analytics, utilizing Azure Data Lake Storage (ADLS) and Delta Tables for efficient storage and querying.
 
-<img src="assets/images/fintech_pipeline_run.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 2px solid #d3d3d3; border-radius: 10px" width="600">
+Below is the architecture diagram showcasing how data flows through the different components:
+
+<img src="assets/images/pipeline_architecture.png" alt="Fintech Azure Snyapse Pipeline Architecture" style="border: 2px solid #d3d3d3; border-radius: 10px" width="600">
 
 ## Tech Stack
 
@@ -26,16 +28,16 @@ This project sets up an end-to-end data pipeline that transforms and processes h
 
 ## Pipeline Overview
 
+The data pipeline consists of the following activities:
+
+<img src="assets/images/fintech_pipeline_run.png" alt="Fintech Azure Snyapse Pipeline Complete Run" style="border: 2px solid #d3d3d3; border-radius: 10px" width="600">
+
+For detailed activity descriptions, see [Pipeline Activities](docs/Pipeline_Activities.md).
+
 The data pipeline consists of the following stages:
 
 <img src="assets/images/storage_account_layers.png" alt="Storage Account Layers" style="border: 2px solid #d3d3d3; border-radius: 10px;" width="600">
 
-## Pipeline Overview
-
-The data pipeline consists of the following stages:
-
 - **Bronze Layer**: Raw, unprocessed data directly coming from each table stored in the Azure SQL database. All these tables are stored in **Parquet** format in **Azure Data Lake Storage (ADLS)** for further processing.
 - **Silver Layer**: Cleaned and transformed data stored as **Delta Tables** for optimized querying and performance.
 - **Gold Layer**: The final, optimized dataset containing **dimension** and **fact** tables, designed for high-performance analytics and reporting.
-
-For detailed activity descriptions, see [Pipeline Activities](docs/Pipeline_Activities.md).
